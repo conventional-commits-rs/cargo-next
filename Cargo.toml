@@ -9,5 +9,5 @@ authors = ["Sven Lechner <SirWindfield@users.noreply.github.com>"]
 edition = "2018"
 
 [dependencies]
-toml_edit = "0.2.0"
 pico-args = "0.3.3"
+toml_edit = "0.2.0"
