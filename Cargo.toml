@@ -1,6 +1,8 @@
 [package]
-name = "zerotask-rust-lib-template"
-version = "0.1.0"
+name = "cargo-next"
+description = "A cargo subcommand to set the next crate version"
+version = "0.0.0"
 license = "MIT OR Apache-2.0"
+repository = "https://github.com/conventional-commits-rs/cargo-next"
 authors = ["Sven Lechner <SirWindfield@users.noreply.github.com>"]
 edition = "2018"
