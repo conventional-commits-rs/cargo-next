@@ -9,6 +9,7 @@ const HELP: &str = "USAGE: cargo next <VERSION>";
 struct Args {
     help: bool,
     next_version: Vec<String>,
+    version: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -18,13 +19,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let args = Args {
         help: args.contains(["-h", "--help"]),
+        version: args.contains(["-V", "--version"]),
         next_version: args.free()?,
     };
-    if args.next_version.len() != 1 {
+
+    if args.help {
+        println!("{}", HELP);
+    } else if args.version {
+        println!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+    } else if args.next_version.len() != 1 {
         eprintln!("{}", HELP);
         exit(1);
-    } else if args.help {
-        println!("{}", HELP);
     } else {
         // Check if the current directory is actually a cargo project.
         let cargo_project_dir_path = current_dir()?;
