@@ -1,6 +1,6 @@
 # cargo-next
 
-[![Maintenance](https://img.shields.io/badge/maintenance-actively%20maintained-brightgreen.svg)](https://github.com/SirWindfield/cargo-next)
+[![Maintenance](https://img.shields.io/badge/maintenance-actively%20maintained-brightgreen.svg)](https://github.com/conventional-commits-rs/cargo-next)
 [![crates.io](https://img.shields.io/crates/v/cargo-next.svg)](https://crates.io/crates/cargo-next)
 [![crates.io](https://img.shields.io/crates/d/cargo-next)](https://crates.io/crates/cargo-next)
 [![Documentation](https://docs.rs/cargo-next/badge.svg)](https://docs.rs/cargo-next)
