@@ -1,25 +1,21 @@
-use std::fs;
-use std::io::Error as IoError;
-use toml_edit::{value, Document};
-use std::path::Path;
+use std::{fs, io::Error as IoError, path::Path};
 use thiserror::Error;
-use toml_edit::{TomlError, Item};
+use toml_edit::{value, Document, Item, TomlError};
 
 /// The error type of this crate.
 #[derive(Debug, Error)]
 pub enum Error {
-    /// An error that occurred during the read and write operation of the `Cargo.toml` file.
+    /// An error that occurred during the read and write operation of the
+    /// `Cargo.toml` file.
     #[error("an io error occurred")]
     IoError(#[from] IoError),
     /// An error that occurred during the toml parsing.
     #[error("a parser error occurred")]
     ParseError(#[from] TomlError),
-    /// An error that gets emitted if the `package.version` field has not the right type (String).
+    /// An error that gets emitted if the `package.version` field has not the
+    /// right type (String).
     #[error("the field {field:?} is not of type {ty:?}")]
-    InvalidFieldType {
-        field: String,
-        ty: String,
-    },
+    InvalidFieldType { field: String, ty: String },
 }
 
 /// Returns the version inside a `Cargo.toml` file.
@@ -30,7 +26,8 @@ pub enum Error {
 ///
 /// # Returns
 ///
-/// The version as a `String` if it could be successfully extracted, otherwise an error.
+/// The version as a `String` if it could be successfully extracted, otherwise
+/// an error.
 pub fn get_version(path: impl AsRef<Path>) -> Result<String, Error> {
     let cargo_toml_content = fs::read_to_string(path.as_ref())?;
     let doc = cargo_toml_content.parse::<Document>()?;
@@ -41,7 +38,7 @@ pub fn get_version(path: impl AsRef<Path>) -> Result<String, Error> {
         .map(|s| s.to_string())
         .ok_or_else(|| Error::InvalidFieldType {
             field: "version".to_string(),
-            ty: "string".to_string()
+            ty: "string".to_string(),
         })
 }
 

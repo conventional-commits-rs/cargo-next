@@ -1,8 +1,10 @@
-use pico_args::Arguments;
-use std::env::{args_os, current_dir};
-use std::io;
-use std::process::exit;
 use cargo_next::set_version;
+use pico_args::Arguments;
+use std::{
+    env::{args_os, current_dir},
+    io,
+    process::exit,
+};
 
 const HELP: &str = "USAGE: cargo next <VERSION>";
 
