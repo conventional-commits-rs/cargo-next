@@ -4,6 +4,7 @@ use std::fs;
 use std::io;
 use std::process::exit;
 use toml_edit::{value, Document};
+use cargo_next::set_version;
 
 const HELP: &str = "USAGE: cargo next <VERSION>";
 
@@ -52,13 +53,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             exit(1);
         }
 
-        // Read and modify Cargo.toml.
-        let cargo_toml_content = fs::read_to_string(&cargo_toml_file_path)?;
-        let mut doc = cargo_toml_content.parse::<Document>()?;
-        doc["package"]["version"] = value(args.next_version[0].as_ref());
-
-        // Write file back.
-        fs::write(cargo_toml_file_path, doc.to_string())?;
+        set_version(&cargo_toml_file_path, &args.next_version[0]);
     }
+
     Ok(())
 }
