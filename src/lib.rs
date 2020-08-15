@@ -1,6 +1,5 @@
 use std::fs;
 use std::io::Error as IoError;
-
 use toml_edit::{value, Document};
 use std::path::Path;
 use thiserror::Error;
@@ -60,7 +59,7 @@ pub fn set_version(path: impl AsRef<Path>, version: impl AsRef<str>) -> Result<(
     let mut doc = cargo_toml_content.parse::<Document>()?;
 
     doc["package"]["version"] = value(version.as_ref());
-    fs::write(cargo_toml_file.as_ref(), doc.to_string())?;
+    fs::write(path.as_ref(), doc.to_string())?;
 
     Ok(())
 }

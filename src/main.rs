@@ -1,9 +1,7 @@
 use pico_args::Arguments;
 use std::env::{args_os, current_dir};
-use std::fs;
 use std::io;
 use std::process::exit;
-use toml_edit::{value, Document};
 use cargo_next::set_version;
 
 const HELP: &str = "USAGE: cargo next <VERSION>";
@@ -53,7 +51,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             exit(1);
         }
 
-        set_version(&cargo_toml_file_path, &args.next_version[0]);
+        set_version(&cargo_toml_file_path, &args.next_version[0])?;
     }
 
     Ok(())
