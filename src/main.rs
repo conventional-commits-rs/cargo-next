@@ -25,12 +25,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         next_version: args.free()?,
     };
 
-    // Check standard-in to allow for piping.
-    let mut piped = String::new();
-    io::stdin().read_line(&mut piped)?;
-    let piped_trim = piped.trim();
-    if !piped_trim.is_empty() {
-        args.next_version.push(piped_trim.to_string());
+    // Default to stdin if no version has been specified.
+    if args.next_version.is_empty() {
+        let mut piped = String::new();
+        io::stdin().read_line(&mut piped)?;
+        let piped_trim = piped.trim();
+        if !piped_trim.is_empty() {
+            args.next_version.push(piped_trim.to_string());
+        }
     }
 
     if args.help {
