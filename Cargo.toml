@@ -10,5 +10,5 @@ edition = "2018"
 
 [dependencies]
 pico-args = "0.3.3"
-thiserror = "1.0.20"
+thiserror = "1.0.22"
 toml_edit = "0.2.0"
