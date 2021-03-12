@@ -10,6 +10,7 @@ pub enum Error {
     /// `Cargo.toml` file.
     #[error("an io error occurred")]
     IoError(#[from] IoError),
+    /// An error that occures while parsing a semver version string.
     #[error("An error occurred during version parsing")]
     SemverParseError(#[from] semver::SemVerError),
     /// An error that occurred during the toml parsing.
@@ -21,10 +22,14 @@ pub enum Error {
     InvalidFieldType { field: String, ty: String },
 }
 
+/// An enum defining what types of increments can be done to a semver version.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum SemVer {
+    /// A major increment.
     Major,
+    /// A minor increment.
     Minor,
+    /// A patch increment.
     Patch,
 }
 
