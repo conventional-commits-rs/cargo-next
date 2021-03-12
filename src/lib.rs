@@ -38,18 +38,20 @@ pub enum SemVer {
 ///
 /// The version as a `String` if it could be successfully extracted, otherwise
 /// an error.
-pub fn get_version(path: impl AsRef<Path>) -> Result<String, Error> {
+pub fn get_version(path: impl AsRef<Path>) -> Result<Version, Error> {
     let cargo_toml_content = fs::read_to_string(path.as_ref())?;
     let doc = cargo_toml_content.parse::<Document>()?;
     let item: &Item = &doc["package"]["version"];
 
     // This should be the case for valid Cargo.toml files.
-    item.as_str()
-        .map(|s| s.to_string())
-        .ok_or_else(|| Error::InvalidFieldType {
+    if let Some(s) = item.as_str() {
+        Ok(Version::parse(s)?)
+    } else {
+        Err(Error::InvalidFieldType {
             field: "version".to_string(),
             ty: "string".to_string(),
         })
+    }
 }
 
 /// Sets the version inside a `Cargo.toml` file.
@@ -57,6 +59,8 @@ pub fn get_version(path: impl AsRef<Path>) -> Result<String, Error> {
 /// # Arguments
 ///
 /// - `path`: The path to the `Cargo.toml` file.
+/// - `version`: The version to write into the file. Note that no checks are
+///   done to see whether the value contains a valid semver version.
 ///
 /// # Returns
 ///
@@ -81,13 +85,14 @@ pub fn set_version(path: impl AsRef<Path>, version: impl AsRef<str>) -> Result<(
 /// # Returns
 ///
 /// The new version or an error if something went wrong during IO operations.
-pub fn bump_version(path: impl AsRef<Path>, r#type: SemVer) -> Result<String, Error> {
-    let version = get_version(path)?;
-    let mut version: Version = Version::parse(&version)?;
+pub fn bump_version(path: impl AsRef<Path>, r#type: SemVer) -> Result<Version, Error> {
+    let mut version = get_version(path.as_ref())?;
     match r#type {
         SemVer::Major => version.increment_major(),
         SemVer::Minor => version.increment_minor(),
         SemVer::Patch => version.increment_patch(),
     }
-    Ok(version.to_string())
+
+    set_version(path, &version.to_string())?;
+    Ok(version)
 }
