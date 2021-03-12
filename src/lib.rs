@@ -1,3 +1,4 @@
+use semver::Version;
 use std::{fs, io::Error as IoError, path::Path};
 use thiserror::Error;
 use toml_edit::{value, Document, Item, TomlError};
@@ -9,6 +10,8 @@ pub enum Error {
     /// `Cargo.toml` file.
     #[error("an io error occurred")]
     IoError(#[from] IoError),
+    #[error("An error occurred during version parsing")]
+    SemverParseError(#[from] semver::SemVerError),
     /// An error that occurred during the toml parsing.
     #[error("a parser error occurred")]
     ParseError(#[from] TomlError),
@@ -16,6 +19,13 @@ pub enum Error {
     /// right type (String).
     #[error("the field {field:?} is not of type {ty:?}")]
     InvalidFieldType { field: String, ty: String },
+}
+
+#[derive(Debug, PartialEq)]
+pub enum SemVer {
+    Major,
+    Minor,
+    Patch,
 }
 
 /// Returns the version inside a `Cargo.toml` file.
@@ -59,4 +69,25 @@ pub fn set_version(path: impl AsRef<Path>, version: impl AsRef<str>) -> Result<(
     fs::write(path.as_ref(), doc.to_string())?;
 
     Ok(())
+}
+
+/// Bumps the version inside a `Cargo.toml` file according to semver specs.
+///
+/// # Arguments
+///
+/// - `path`: The path to the `Cargo.toml` file.
+/// - `type`: The type of bump. Either patch, minor or major.
+///
+/// # Returns
+///
+/// The new version or an error if something went wrong during IO operations.
+pub fn bump_version(path: impl AsRef<Path>, r#type: SemVer) -> Result<String, Error> {
+    let version = get_version(path)?;
+    let mut version: Version = Version::parse(&version)?;
+    match r#type {
+        SemVer::Major => version.increment_major(),
+        SemVer::Minor => version.increment_minor(),
+        SemVer::Patch => version.increment_patch(),
+    }
+    Ok(version.to_string())
 }
