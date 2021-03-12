@@ -21,7 +21,7 @@ pub enum Error {
     InvalidFieldType { field: String, ty: String },
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum SemVer {
     Major,
     Minor,
