@@ -1,4 +1,4 @@
-use cargo_next::{bump_version, set_version, SemVer};
+use cargo_next::{bump_version, get_version, set_version, SemVer};
 use clap::{AppSettings, Clap};
 use std::{env::current_dir, io, process::exit};
 
@@ -20,6 +20,10 @@ enum Cli {
 
 #[derive(Clap, Debug)]
 struct Args {
+    /// Returns the current version of a crate.
+    #[clap(long)]
+    pub get: bool,
+
     /// Increment the crate's major version.
     #[clap(long)]
     pub major: bool,
@@ -43,7 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     // If no flag has been specified and no version, read from stdin.
-    if !cli.major && !cli.minor && !cli.patch && cli.version.is_none() {
+    if !cli.major && !cli.minor && !cli.patch && !cli.get && cli.version.is_none() {
         let mut piped = String::new();
         io::stdin().read_line(&mut piped)?;
         let piped_trim = piped.trim();
@@ -60,7 +64,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         exit(1);
     }
 
-    if cli.major {
+    if cli.get {
+        println!("{}", get_version(&cargo_toml_file_path)?);
+    } else if cli.major {
         bump_version(&cargo_toml_file_path, SemVer::Major)?;
     } else if cli.minor {
         bump_version(&cargo_toml_file_path, SemVer::Minor)?;
