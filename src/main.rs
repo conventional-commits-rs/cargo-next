@@ -1,61 +1,75 @@
-use cargo_next::set_version;
-use pico_args::Arguments;
-use std::{
-    env::{args_os, current_dir},
-    io,
-    process::exit,
-};
+use cargo_next::{bump_version, set_version, SemVer};
+use clap::{AppSettings, Clap};
+use std::{env::current_dir, io, process::exit};
 
-const HELP: &str = "USAGE: cargo next <VERSION>";
+#[derive(Clap, Debug)]
+#[clap(
+    author,
+    bin_name("cargo-next"),
+    setting(AppSettings::ColoredHelp),
+    version
+)]
+enum Cli {
+    #[clap(
+        name = "next",
+        setting(AppSettings::DeriveDisplayOrder),
+        setting(AppSettings::UnifiedHelpMessage)
+    )]
+    Next(Args),
+}
 
+#[derive(Clap, Debug)]
 struct Args {
-    help: bool,
-    next_version: Vec<String>,
-    version: bool,
+    /// Increment the crate's major version.
+    #[clap(long)]
+    pub major: bool,
+
+    /// Increment the crate's minor version.
+    #[clap(long)]
+    pub minor: bool,
+
+    /// Increment the crate's patch version.
+    #[clap(long)]
+    pub patch: bool,
+
+    /// The version to set the crate to.
+    pub version: Option<String>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Cargo subcommands need special handling.
-    let args_to_use = args_os().skip(2).collect();
-    let mut args = Arguments::from_vec(args_to_use);
-
-    let mut args = Args {
-        help: args.contains(["-h", "--help"]),
-        version: args.contains(["-V", "--version"]),
-        next_version: args.free()?,
+    let cli = Cli::parse();
+    let mut cli = match cli {
+        Cli::Next(args) => args,
     };
 
-    // Default to stdin if no version has been specified.
-    if args.next_version.is_empty() {
+    // If no flag has been specified and no version, read from stdin.
+    if !cli.major && !cli.minor && !cli.patch && cli.version.is_none() {
         let mut piped = String::new();
         io::stdin().read_line(&mut piped)?;
         let piped_trim = piped.trim();
         if !piped_trim.is_empty() {
-            args.next_version.push(piped_trim.to_string());
+            cli.version = Some(piped_trim.to_string());
         }
     }
 
-    if args.help {
-        println!("{}", HELP);
-    } else if args.version {
-        println!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
-    } else if args.next_version.len() != 1 {
-        eprintln!(
-            "Only one version can be specified! Passed: {:?}",
-            args.next_version
-        );
-        eprintln!("{}", HELP);
+    // Check if the current directory is actually a cargo project.
+    let cargo_project_dir_path = current_dir()?;
+    let cargo_toml_file_path = cargo_project_dir_path.join("Cargo.toml");
+    if !cargo_toml_file_path.exists() {
+        eprintln!("Not inside a cargo project folder!");
         exit(1);
-    } else {
-        // Check if the current directory is actually a cargo project.
-        let cargo_project_dir_path = current_dir()?;
-        let cargo_toml_file_path = cargo_project_dir_path.join("Cargo.toml");
-        if !cargo_toml_file_path.exists() {
-            eprintln!("Not inside a cargo project folder!");
-            exit(1);
-        }
+    }
 
-        set_version(&cargo_toml_file_path, &args.next_version[0])?;
+    if cli.major {
+        bump_version(&cargo_toml_file_path, SemVer::Major)?;
+    } else if cli.minor {
+        bump_version(&cargo_toml_file_path, SemVer::Minor)?;
+    } else if cli.patch {
+        bump_version(&cargo_toml_file_path, SemVer::Patch)?;
+    } else {
+        // Safety: Either `version` contains a String supplied from the user or the CLI
+        // waits until it can read from stdin, in which case a version gets set as well.
+        set_version(&cargo_toml_file_path, cli.version.unwrap())?;
     }
 
     Ok(())
