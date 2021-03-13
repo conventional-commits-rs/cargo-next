@@ -21,6 +21,8 @@ cargo install cargo-next --locked
 $ cargo next --minor
 $ cargo next 0.1.5
 $ ./emits-new-version.sh | cargo next
+$ cargo next --get
+0.2.3
 ```
 
 ### Library
