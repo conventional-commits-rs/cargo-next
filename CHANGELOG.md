@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# [HEAD](https://github.com/conventional-commits-rs/cargo-next/compare/v0.1.4...HEAD) (2020-08-15)
+# [HEAD](https://github.com/conventional-commits-rs/cargo-next/compare/v0.2.0...HEAD) (2021-03-13)
+
+# [v0.2.0](https://github.com/conventional-commits-rs/cargo-next/compare/v0.1.4...v0.2.0) (2021-03-13)
+
+### Features
+
+- **cli**: add semver flags ([f7437fd](https://github.com/conventional-commits-rs/cargo-next/commit/f7437fda834ce64badb927b344d263f0f04fe168))
+- **lib**: add standard derives to SemVer ([734ed4a](https://github.com/conventional-commits-rs/cargo-next/commit/734ed4aecab431a4201e0eee50a86209324bd7b8))
+- **lib**: add bump_version method ([6a811f1](https://github.com/conventional-commits-rs/cargo-next/commit/6a811f1181bf132d085d4e1227f0e109de39a1e5))
 
 ## [v0.1.4](https://github.com/conventional-commits-rs/cargo-next/compare/v0.1.3...v0.1.4) (2020-08-15)
 
@@ -28,4 +36,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - version flag ([c51731e](https://github.com/conventional-commits-rs/cargo-next/commit/c51731ec6964c76ee7118831f8283dd3e425f81f))
 
 # [v0.1.0](https://github.com/conventional-commits-rs/cargo-next/compare/v0.0.0...v0.1.0) (2020-08-05)
-
