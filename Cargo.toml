@@ -2,6 +2,7 @@
 name = "cargo-next"
 description = "A cargo subcommand to set the next crate version"
 version = "0.2.1"
+categories = ["command-line-utilities", "development-tools::cargo-plugins"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/conventional-commits-rs/cargo-next"
