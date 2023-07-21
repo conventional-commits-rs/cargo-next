@@ -12,7 +12,7 @@ pub enum Error {
     IoError(#[from] IoError),
     /// An error that occures while parsing a semver version string.
     #[error("An error occurred during version parsing")]
-    SemverParseError(#[from] semver::SemVerError),
+    SemverParseError(#[from] semver::Error),
     /// An error that occurred during the toml parsing.
     #[error("a parser error occurred")]
     ParseError(#[from] TomlError),
@@ -100,4 +100,24 @@ pub fn bump_version(path: impl AsRef<Path>, r#type: SemVer) -> Result<Version, E
 
     set_version(path, &version.to_string())?;
     Ok(version)
+}
+
+trait SemVerExt {
+    fn increment_major(&mut self);
+    fn increment_minor(&mut self);
+    fn increment_patch(&mut self);
+}
+
+impl SemVerExt for Version {
+    fn increment_major(&mut self) {
+        self.major += 1;
+    }
+
+    fn increment_minor(&mut self) {
+        self.minor += 1;
+    }
+
+    fn increment_patch(&mut self) {
+        self.patch += 1;
+    }
 }

@@ -1,24 +1,19 @@
 use cargo_next::{bump_version, get_version, set_version, SemVer};
-use clap::{AppSettings, Clap};
+use clap::Parser;
 use std::{env::current_dir, io, process::exit};
 
-#[derive(Clap, Debug)]
+#[derive(Debug, Parser)]
 #[clap(
     author,
     bin_name("cargo-next"),
-    setting(AppSettings::ColoredHelp),
     version
 )]
 enum Cli {
-    #[clap(
-        name = "next",
-        setting(AppSettings::DeriveDisplayOrder),
-        setting(AppSettings::UnifiedHelpMessage)
-    )]
+    #[clap(name = "next")]
     Next(Args),
 }
 
-#[derive(Clap, Debug)]
+#[derive(Debug, Parser)]
 struct Args {
     /// Returns the current version of a crate.
     #[clap(long)]
