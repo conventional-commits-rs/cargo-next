@@ -37,7 +37,7 @@ in
 {
   cargo2nixVersion = "0.11.0";
   workspace = {
-    cargo-next = rustPackages.unknown.cargo-next."0.2.2";
+    cargo-next = rustPackages.unknown.cargo-next."0.2.3";
   };
   "registry+https://github.com/rust-lang/crates.io-index".anstream."0.3.2" = overridableMkRustCrate (profileName: rec {
     name = "anstream";
@@ -116,9 +116,9 @@ in
     ];
   });
   
-  "unknown".cargo-next."0.2.2" = overridableMkRustCrate (profileName: rec {
+  "unknown".cargo-next."0.2.3" = overridableMkRustCrate (profileName: rec {
     name = "cargo-next";
-    version = "0.2.2";
+    version = "0.2.3";
     registry = "unknown";
     src = fetchCrateLocal workspaceSrc;
     dependencies = {
