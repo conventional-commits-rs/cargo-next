@@ -7,7 +7,7 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/conventional-commits-rs/cargo-next"
 authors = ["mainrs"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 clap = { version = "4.3.17", features = ["derive"] }
