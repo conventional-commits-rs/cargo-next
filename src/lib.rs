@@ -111,10 +111,13 @@ trait SemVerExt {
 impl SemVerExt for Version {
     fn increment_major(&mut self) {
         self.major += 1;
+        self.minor = 0;
+        self.patch = 0;
     }
 
     fn increment_minor(&mut self) {
         self.minor += 1;
+        self.patch = 0;
     }
 
     fn increment_patch(&mut self) {
