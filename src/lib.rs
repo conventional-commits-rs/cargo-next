@@ -124,3 +124,37 @@ impl SemVerExt for Version {
         self.patch += 1;
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use semver::Version;
+    use super::SemVerExt;
+
+    use rstest::{fixture, rstest};
+
+    #[fixture]
+    pub fn fixture() -> Version {
+        Version::new(1, 2, 3)
+    }
+
+    #[rstest]
+    fn bump_patch(fixture: Version) {
+        let mut fixture = fixture;
+        fixture.increment_patch();
+        assert_eq!(Version::new(1, 2, 4), fixture)
+    }
+
+    #[rstest]
+    fn bump_minor(fixture: Version) {
+        let mut fixture = fixture;
+        fixture.increment_minor();
+        assert_eq!(Version::new(1, 3, 0), fixture)
+    }
+
+    #[rstest]
+    fn bump_major(fixture: Version) {
+        let mut fixture = fixture;
+        fixture.increment_major();
+        assert_eq!(Version::new(2, 0, 0), fixture)
+    }
+}

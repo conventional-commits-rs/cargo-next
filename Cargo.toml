@@ -14,3 +14,6 @@ clap = { version = "4.3.17", features = ["derive"] }
 semver = "1.0.18"
 thiserror = "1.0.24"
 toml_edit = "0.19.14"
+
+[dev-dependencies]
+rstest = "0.18.2"
