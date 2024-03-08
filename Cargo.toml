@@ -1,7 +1,7 @@
 [package]
 name = "cargo-next"
 description = "A cargo subcommand to set the next crate version"
-version = "0.2.3"
+version = "0.2.4"
 categories = ["command-line-utilities", "development-tools::cargo-plugins"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"
@@ -14,3 +14,6 @@ clap = { version = "4.3.17", features = ["derive"] }
 semver = "1.0.18"
 thiserror = "1.0.24"
 toml_edit = "0.19.14"
+
+[dev-dependencies]
+rstest = "0.18.2"
